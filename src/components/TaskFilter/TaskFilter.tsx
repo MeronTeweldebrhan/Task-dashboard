@@ -19,6 +19,7 @@ function TaskFilter({
         <option value="pending">Pending</option>
         <option value="in-progress">In Progress</option>
         <option value="completed">Completed</option>
+        <option value="overdue">Overdue</option>
       </select>
 
       <label htmlFor="priority-filter" className="ms-18 mr-2 font-medium text-gray-700">Filter by Priority:</label>

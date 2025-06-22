@@ -20,8 +20,10 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedTasks = tasks.map((task) => {
-        const isOverdue = new Date(task.dueDate) < new Date() && task.status !== "completed";
-        return isOverdue ? { ...task, status: "in-progress" as TaskStatus } : task;
+        const now= new Date();
+        const dueDate = new Date(task.dueDate);
+        const isOverdue = dueDate < now && task.status !== "completed";
+        return isOverdue ? { ...task, status: "overdue" as TaskStatus } : task;
       });
       setTasks(updatedTasks);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTasks));

@@ -1,4 +1,4 @@
-export type TaskStatus = 'all'|'pending' | 'in-progress' | 'completed';
+export type TaskStatus = 'pending' | 'in-progress' | 'completed' | 'overdue';
  export type TaskPriority = 'all'| "low" | "medium" | "high";
 
  export interface TaskFormProps {

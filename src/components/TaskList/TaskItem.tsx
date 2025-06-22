@@ -13,6 +13,7 @@ function TaskItem({ task, onDelete, onStatusChange,onPriorityChange }: TaskItemP
         <option value="pending">Pending</option>
         <option value="in-progress">In Progress</option>
         <option value="completed">Completed</option>
+        <option value="overdue">Overdue</option>
       </select>
       <select
         id={`priority-${task.id}`}
