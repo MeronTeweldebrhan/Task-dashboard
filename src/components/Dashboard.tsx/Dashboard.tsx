@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import TaskForm from "../TaskForm/TaskForm
-import TaskFilter from "./TaskFilter";
-import TaskList from "./TaskList";
-import { Task } from "../types";
+import TaskForm from "../TaskForm/TaskForm";
+import TaskFilter from "../TaskFilter/TaskFilter";
+import TaskList from "../TaskList/TaskList";
+import type { Task, TaskPriority, TaskStatus } from "../../types/Index";
+import { filterTasks,} from "../../utils/taskUtils";
 
 const LOCAL_STORAGE_KEY = "tasks";
 
 const Dashboard: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [filter, setFilter] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "all">("all");
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
@@ -18,8 +20,8 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedTasks = tasks.map((task) => {
-        const isOverdue = new Date(task.deadline) < new Date() && task.status !== "Completed";
-        return isOverdue ? { ...task, status: "Overdue" } : task;
+        const isOverdue = new Date(task.dueDate) < new Date() && task.status !== "completed";
+        return isOverdue ? { ...task, status: "in-progress" as TaskStatus } : task;
       });
       setTasks(updatedTasks);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTasks));
@@ -33,8 +35,16 @@ const Dashboard: React.FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
 
-  const updateStatus = (id: string, status: string) => {
+  const filtered = filterTasks(tasks, statusFilter, priorityFilter);
+  
+
+  const updateStatus = (id: string, status: TaskStatus) => {
     const updated = tasks.map(task => task.id === id ? { ...task, status } : task);
+    setTasks(updated);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+  };
+  const updatePriority = (id: string, priority: TaskPriority) => {
+    const updated = tasks.map(task => task.id === id ? { ...task, priority } : task);
     setTasks(updated);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
@@ -45,14 +55,22 @@ const Dashboard: React.FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
 
-  const filtered = filter ? tasks.filter(t => t.status === filter) : tasks;
-
   return (
     <div className="max-w-3xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">📋 Task Manager</h1>
+      <TaskFilter
+        onStatusFilterChange={setStatusFilter}
+        onPriorityFilterChange={setPriorityFilter}
+        currentStatus={statusFilter}
+        currentPriority={priorityFilter}
+      />
       <TaskForm onAddTask={addTask} />
-      <TaskFilter onFilterChange={setFilter} />
-      <TaskList tasks={filtered} onUpdateStatus={updateStatus} onDelete={deleteTask} />
+      <TaskList
+        tasks={filtered}
+        onStatusChange={updateStatus}
+        onPriorityChange={updatePriority}
+        onDelete={deleteTask}
+      />
     </div>
   );
 };
