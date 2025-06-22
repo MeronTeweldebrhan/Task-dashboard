@@ -19,11 +19,11 @@ export function searchTasks(tasks: Task[], query: string) {
   );
 }
 
-export function validateTask(task: Partial<Task>) {
-  const errors: { [key: string]: string } = {};
-  if (!task.title || !task.title.trim()) errors.title = "Title is required.";
-  if (!task.description || !task.description.trim()) errors.description = "Description is required.";
-  if (!task.dueDate || isNaN(Date.parse(task.dueDate))) errors.dueDate = "Valid due date is required.";
+export function validateTask({ title, description, dueDate }: { title: string, description: string, dueDate: string }) {
+  const errors: { title?: string; description?: string; dueDate?: string } = {};
+  if (!title) errors.title = "Title is required.";
+  if (!description) errors.description = "Description is required.";
+  if (!dueDate) errors.dueDate = "Valid due date is required.";
   return errors;
 }
 
