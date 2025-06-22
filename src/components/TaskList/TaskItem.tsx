@@ -3,10 +3,8 @@ import type { TaskItemProps, TaskStatus,TaskPriority } from '../../types/Index';
 function TaskItem({ task, onDelete, onStatusChange,onPriorityChange }: TaskItemProps) {
   return (
     <li>
-      <h3>{task.title}</h3>
-      <p>{task.description}</p>
-      <p>Status: {task.status}</p>
-      <p>Priority: {task.priority}</p>
+      <h3>Title: {task.title}</h3>
+      <p>Description: {task.description}</p>
       <p>Due Date: {task.dueDate}</p>
       <select
         value={task.status}
