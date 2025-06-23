@@ -32,3 +32,7 @@ export function formatDate(dateStr: string) {
   if (isNaN(date.getTime())) return "Invalid date";
   return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 }
+
+export function updateTask(tasks: Task[], updatedTask: Task): Task[] {
+  return tasks.map(task => task.id === updatedTask.id ? { ...task, ...updatedTask } : task);
+}

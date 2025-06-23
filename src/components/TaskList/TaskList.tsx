@@ -2,7 +2,7 @@
 import type { TaskListProps } from "../../types/Index";
 import TaskItem from "./TaskItem";
 
-function TaskList({ tasks, onStatusChange, onPriorityChange, onDelete }: TaskListProps) {
+function TaskList({ tasks, onStatusChange, onPriorityChange, onDelete, onEdit }: TaskListProps) {
   return (
     <ul>
       {tasks.length > 0 ? (
@@ -13,6 +13,7 @@ function TaskList({ tasks, onStatusChange, onPriorityChange, onDelete }: TaskLis
             onDelete={onDelete}
             onStatusChange={onStatusChange}
             onPriorityChange={onPriorityChange}
+            onEdit={onEdit}
           />
         ))
       ) : (

@@ -3,7 +3,7 @@ import TaskForm from "../TaskForm/TaskForm";
 import TaskFilter from "../TaskFilter/TaskFilter";
 import TaskList from "../TaskList/TaskList";
 import type { Task, TaskPriority, TaskStatus } from "../../types/Index";
-import { filterTasks,} from "../../utils/taskUtils";
+import { filterTasks,updateTask} from "../../utils/taskUtils";
 
 const LOCAL_STORAGE_KEY = "tasks";
 
@@ -39,7 +39,11 @@ const Dashboard: React.FC = () => {
 
   const filtered = filterTasks(tasks, statusFilter, priorityFilter);
   
-
+const editTask = (updatedTask: Task) => {
+  const updated = updateTask(tasks, updatedTask);
+  setTasks(updated);
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+};
   const updateStatus = (id: string, status: TaskStatus) => {
     const updated = tasks.map(task => task.id === id ? { ...task, status } : task);
     setTasks(updated);
@@ -71,6 +75,7 @@ const Dashboard: React.FC = () => {
         tasks={filtered}
         onStatusChange={updateStatus}
         onPriorityChange={updatePriority}
+        onEdit={editTask}
         onDelete={deleteTask}
       />
     </div>
