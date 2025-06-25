@@ -36,3 +36,5 @@ export function formatDate(dateStr: string) {
 export function updateTask(tasks: Task[], updatedTask: Task): Task[] {
   return tasks.map(task => task.id === updatedTask.id ? { ...task, ...updatedTask } : task);
 }
+// Function to generate a unique ID for a new task
+export const generateId = () => "_" + Math.random().toString().slice(2, 11);

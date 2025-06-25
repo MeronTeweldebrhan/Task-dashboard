@@ -1,7 +1,7 @@
 // components/TaskForm.tsx
 import  { useState } from "react";
 import type { Task,TaskFormProps } from "../../types/Index";
-import { validateTask } from "../../utils/taskUtils";
+import { validateTask,generateId } from "../../utils/taskUtils";
 
 
 function TaskForm({onAddTask}:TaskFormProps) {
@@ -14,7 +14,7 @@ function TaskForm({onAddTask}:TaskFormProps) {
     dueDate: "",
   });
   const [error, setError] = useState<{title?: string, description?: string, dueDate?: string}>({});
-  const generateId = () => "_" + Math.random().toString().slice(2, 11);
+  
 
   const handleSubmit = () => {
     const { title, description,dueDate } = form;
