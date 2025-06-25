@@ -9,7 +9,7 @@ export function filterTasks(tasks: Task[], statusFilter: TaskStatus | "all", pri
 }
 
 
-
+// Function to search tasks by title or description
 export function searchTasks(tasks: Task[], query: string) {
   if (!query.trim()) return tasks;
   const lower = query.toLowerCase();
@@ -18,7 +18,7 @@ export function searchTasks(tasks: Task[], query: string) {
     task.description.toLowerCase().includes(lower)
   );
 }
-
+/// Validation function for task properties
 export function validateTask({ title, description, dueDate }: { title: string, description: string, dueDate: string }) {
   const errors: { title?: string; description?: string; dueDate?: string } = {};
   if (!title) errors.title = "Title is required.";

@@ -3,7 +3,7 @@ import TaskForm from "../TaskForm/TaskForm";
 import TaskFilter from "../TaskFilter/TaskFilter";
 import TaskList from "../TaskList/TaskList";
 import type { Task, TaskPriority, TaskStatus } from "../../types/Index";
-import { filterTasks,updateTask} from "../../utils/taskUtils";
+import { filterTasks,updateTask,searchTasks} from "../../utils/taskUtils";
 
 const LOCAL_STORAGE_KEY = "tasks";
 
@@ -11,12 +11,13 @@ const Dashboard: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "all">("all");
-
+  const [searchTerm, setSearchTerm] = useState("");
+// Load tasks from localStorage on initial render
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
     setTasks(storedTasks);
   }, []);
-
+// Update task status to "overdue" if due date has passed
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedTasks = tasks.map((task) => {
@@ -36,9 +37,13 @@ const Dashboard: React.FC = () => {
     setTasks(updated);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
-
+// Filter tasks based on status and priority
+  // and then search tasks based on the search term
   const filtered = filterTasks(tasks, statusFilter, priorityFilter);
+  const searched = searchTasks(filtered, searchTerm);
   
+  // Function to edit an existing task
+  // It updates the task in the state and localStorage
 const editTask = (updatedTask: Task) => {
   const updated = updateTask(tasks, updatedTask);
   setTasks(updated);
@@ -64,6 +69,13 @@ const editTask = (updatedTask: Task) => {
   return (
     <div className="max-w-3xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">📋 Task Manager</h1>
+      <input
+  type="text"
+  className="w-full mb-4 p-2 border rounded"
+  placeholder="Search tasks..."
+  value={searchTerm}
+  onChange={e => setSearchTerm(e.target.value)}
+/>
       <TaskFilter
         onStatusFilterChange={setStatusFilter}
         onPriorityFilterChange={setPriorityFilter}
@@ -72,7 +84,7 @@ const editTask = (updatedTask: Task) => {
       />
       <TaskForm onAddTask={addTask} />
       <TaskList
-        tasks={filtered}
+        tasks={searched}
         onStatusChange={updateStatus}
         onPriorityChange={updatePriority}
         onEdit={editTask}
